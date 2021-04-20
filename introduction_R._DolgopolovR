@@ -1,0 +1,47 @@
+#ДХ-125 Долгополов Д.Л. Введение в R
+#1 Вычислить среднее для каждой
+#  колонки таблицы iris, за исключением колонки “Species” и соберите результат в список (list).
+iris
+result1=list(mean(iris$Sepal.Length),
+            mean(iris$Sepal.Width),
+            mean(iris$Petal.Length),
+            mean( iris$Petal.Width));result1
+#2 Вычислить среднее для каждой строки, исключив перед этим колонку “Species” и сохраните
+#  результат в векторе.
+result2=as.vector(apply(iris[1:4],1,mean));result2
+
+#3 Создайте случайные 1000 нуклеотидов, сохранив их в вектор DNA, посчитайте количество
+#  нуклеотидов A и T, их долю от общей длины ДНК и запишите результат в вектор ‘dna_at’.
+nuc=factor(rep(c("A","C","G","T"),c(10,20,30,40)));nuc
+DNA=sample(nuc,size=1000,replace=T);DNA
+dna_at=c(((sum(DNA=="A"))/length(DNA)),(sum(DNA=="T"))/length(DNA));dna_at
+
+#4 Создайте вектор, в котором записан произвольный набор латинских букв длиной
+#  не менее 10000 символов и посчитайте количество гласных.
+letters=factor(sample(c("A","B","C","D","E","F"),size=10000,replace=T))
+result4=c(sum(letters=="A"),sum(letters=="E"));result4
+
+#5 Отсортируйте все виды в таблице iris по средней длине лепестков. Результат должен
+#  быть фактором с градациями в виде имен видов с правильной последовательностью уровней.
+library(dplyr)
+iris
+iris[order(iris$Petal.Length),]
+iris%>% arrange (Petal.Length)
+
+#6 Напишите функцию для расчета медианы вектора самостоятельно.
+v=c(1,2,3,4,5,6,7,8,9)
+median(v)
+
+#7 Постройте график зависимости длины чашелистиков от длины
+#  лепестков для каждого вида из таблицы iris
+plot(iris$Sepal.Length,iris$Petal.Length, xlab="Длина чашелистиков"
+     ,ylab="Длина лепестков",main="Зависимость длины чашелистиков от длины лепестков")
+
+#8 По данным таблицы ‘diamonds’(пакет ggplot2 ) посчитайте среднюю стоимость цены карата
+#  для бриллиантов дороже 1000$ для каждой категории яркости (clarity)
+library(ggplot2)
+diamonds
+unique(diamonds$clarity)
+diamonds%>%filter(price>1000)%>%group_by(clarity)%>%
+  mutate(carat_price=price/carat)%>%
+  summarise(mean_price_carat=mean(carat_price))
